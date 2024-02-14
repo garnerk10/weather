@@ -24,7 +24,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'To-Do List',
+      title: 'Weather',
     }),
   ],
   devtool: 'inline-source-map',
