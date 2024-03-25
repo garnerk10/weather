@@ -2,14 +2,10 @@ import './style.css'
 
 async function getWeather(city) {
     try {
-        fetch(`http://api.weatherapi.com/v1/current.json?key=6e674ec9f4db435aa96210137231912&q=${city}&aqi=no`, {mode: `cors`})
+        const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=6e674ec9f4db435aa96210137231912&q=${city}&aqi=no`, {mode: `cors`})
 
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(response) {
-            console.log(response);
-        })
+        const weatherData = await response.json();
+        return weatherData;
     }
     catch (error){
         console.log(error)
@@ -19,7 +15,7 @@ async function getWeather(city) {
 const pageSetup = (() => {
     const initialSetup = document.createElement(`div`);
     initialSetup.innerHTML = `
-        <h1 class="title" id="title">Check the Weather!</h1>
+        <h1 class="title" id="title">Check the Weather</h1>
 
         <div id="searchHolder">
             <input type="text" id="searchInput" name="searchInput" placeholder="Search"></input>
@@ -30,17 +26,24 @@ const pageSetup = (() => {
         </div>
         
         <div id="displayHolder">
+            <h3 id="temp"></h3>
         </div>`
     document.body.appendChild(initialSetup);
 })();
 
 const searchButton = document.getElementById(`btnHolder`);
-;
 
-
-searchButton.onclick = function(){
+searchButton.addEventListener("click", async function(){
     const searchInput = document.getElementById(`searchInput`).value;
-    getWeather(searchInput);
-};
 
+    const getData = await getWeather(searchInput);
 
+    displayTemp(getData.current.temp_f);
+});
+
+const displayTemp = temp => {
+    const tempText = document.getElementById(`temp`);
+    tempText.innerText = `${temp}`
+}
+
+console.log(await getWeather(`perrysburg`));
